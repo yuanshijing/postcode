@@ -9,23 +9,49 @@ chai.use(sinonChai);
 var main = require("../lib/main.js");
 
 
-describe("测试描述", function(){
+describe("input postcode,get zipcode", function(){
     sinon.spy(console, 'log');
 
-    it("测试用例1", function(){
+    it("输入5位邮政编码，输出条形码", function(){
 
-        var result = main();
-        var expect_string = '';
+        var result = main('95713');
+        var expect_string = '||:|:::|:|:|:::|:::||::||:::||:|';
         
-        expect(expect_string).to.equal(result);
+        expect(result).to.equal(expect_string);
     });
 
-    it("测试用例2", function(){
+    it("输入10位邮政编码，输出条形码", function(){
 
-        main();
-        var result = _.flatten(console.log.args).join("\n");
-        var expect_string = '';
+        var result = main('55555-1237');
+        var expect_string = '|:|:|::|:|::|:|::|:|::|:|::::||::|:|::||:|:::||:::||';
+        
+        expect(result).to.equal(expect_string);
+    });
+    
+    it("输入9位邮政编码，输出条形码", function(){
 
-        expect(expect_string).to.equal(result);
+        var result = main('555551237');
+        var expect_string = '|:|:|::|:|::|:|::|:|::|:|::::||::|:|::||:|:::||:::||';
+        
+        expect(result).to.equal(expect_string);
+    });   
+});
+
+describe("input zipcode,get postcode", function(){
+
+    it("输入5位条形码，输出邮政编码", function(){
+
+        var result =main('||:|:::|:|:|:::|:::||::||::|:|:|');
+        var expect_string = '95713';
+
+        expect(result).to.equal(expect_string);
+    });
+
+    it("输入10位条形码，输出邮政编码", function(){
+
+        var result =main('|:|:|::|:|::|:|::|:|::|:|::::||::|:|::||:|:::||:::||');
+        var expect_string = '55555-1237';
+
+        expect(result).to.equal(expect_string);
     });
 });
